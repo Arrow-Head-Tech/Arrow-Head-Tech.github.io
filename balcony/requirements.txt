@@ -1,0 +1,2 @@
+# Optional: load BALCONY_TARGET_FOLDER from .env (no need to export in shell)
+python-dotenv>=1.0.0

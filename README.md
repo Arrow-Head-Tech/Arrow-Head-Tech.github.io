@@ -58,4 +58,4 @@ Repositório **Arrow-Head-Tech.github.io** → site em **https://arrow-head-tech
 - `scripts/validate-schema.js` — validação com Ajv
 - `scripts/build.js` — copia site + content para `dist/`
 - `balcony/` — scanner local (ver README em balcony/)
-- `potts/` — assistente por voz + “adicionar ao hub” (ver README em potts/)
+- `potts/` — assistente por voz + “adicionar ao hub” Hub writer: `python potts/hub_writer.py list|add|get`. Ver README em potts/; configurar GITHUB_TOKEN em potts/.env (copiar de .env.example)
