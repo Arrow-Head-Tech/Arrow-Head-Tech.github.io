@@ -1,0 +1,13 @@
+{
+  "name": "arrow-head-tech.github.io",
+  "description": "Arrowhead Tech Organization Hub — site + BALCONY + POTTS",
+  "private": true,
+  "scripts": {
+    "validate": "node scripts/validate-schema.js",
+    "build": "node scripts/build.js"
+  },
+  "devDependencies": {
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1"
+  }
+}

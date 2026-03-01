@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "name", "repo_url", "phase", "primary_language", "primary_stack", "tags", "short_description"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+      "name": { "type": "string" },
+      "repo_url": { "type": "string", "format": "uri" },
+      "phase": {
+        "type": "string",
+        "enum": ["idea", "test", "dev", "stg", "prod", "archived", "dropped"]
+      },
+      "primary_language": { "type": "string" },
+      "primary_stack": { "type": "string" },
+      "tags": { "type": "array", "items": { "type": "string" } },
+      "short_description": { "type": "string" },
+      "owner": { "type": "string" },
+      "team": { "type": "string" },
+      "created_at": { "type": "string", "format": "date-time" },
+      "last_updated": { "type": "string", "format": "date" },
+      "status_notes": { "type": "string" },
+      "visibility": { "type": "string" },
+      "links": {
+        "type": "object",
+        "additionalProperties": { "type": "string", "format": "uri" }
+      }
+    },
+    "additionalProperties": false
+  }
+}

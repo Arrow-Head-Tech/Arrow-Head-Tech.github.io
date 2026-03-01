@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arrowhead Tech — Projects</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Arrowhead Tech</h1>
+    <p class="subtitle">Organization projects</p>
+    <nav class="nav" aria-label="Main">
+      <a href="#/" class="nav-link" id="nav-projects">Projects</a>
+      <a href="#/taxonomy" class="nav-link" id="nav-taxonomy">Taxonomy</a>
+      <a href="#/technologies" class="nav-link" id="nav-technologies">Technologies</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <div id="view-projects" class="view">
+      <section class="toolbar">
+        <div class="search-wrap">
+          <label for="search" class="visually-hidden">Search projects</label>
+          <input type="search" id="search" placeholder="Search name, description, tags, language, stack…" autocomplete="off">
+        </div>
+        <div class="filters-wrap">
+          <fieldset class="filter-group" id="filter-phase">
+            <legend>Phase</legend>
+            <div class="chips" data-filter="phase"></div>
+          </fieldset>
+          <fieldset class="filter-group" id="filter-language">
+            <legend>Language</legend>
+            <div class="chips" data-filter="primary_language"></div>
+          </fieldset>
+          <fieldset class="filter-group" id="filter-stack">
+            <legend>Stack</legend>
+            <div class="chips" data-filter="primary_stack"></div>
+          </fieldset>
+          <fieldset class="filter-group" id="filter-tags">
+            <legend>Tags</legend>
+            <div class="chips" data-filter="tags"></div>
+          </fieldset>
+          <button type="button" class="btn-clear" id="clear-filters">Clear filters</button>
+        </div>
+        <div class="active-filters" id="active-filters"></div>
+        <div class="view-toggle">
+          <button type="button" id="view-table" class="view-btn active" aria-pressed="true">Table</button>
+          <button type="button" id="view-cards" class="view-btn" aria-pressed="false">Cards</button>
+        </div>
+      </section>
+
+      <section class="results" aria-live="polite">
+        <div id="results-table-wrap" class="results-table-wrap">
+          <table class="table" id="results-table">
+            <thead>
+              <tr>
+                <th scope="col"><button type="button" data-sort="name">Name</button></th>
+                <th scope="col"><button type="button" data-sort="phase">Phase</button></th>
+                <th scope="col"><button type="button" data-sort="primary_language">Language</button></th>
+                <th scope="col"><button type="button" data-sort="primary_stack">Stack</button></th>
+                <th scope="col">Tags</th>
+                <th scope="col">Link</th>
+                <th scope="col"><button type="button" data-sort="last_updated">Last update</button></th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+        <div id="results-cards" class="results-cards" hidden></div>
+        <p id="no-results" class="no-results" hidden>No projects match the current filters.</p>
+      </section>
+    </div>
+
+    <div id="view-taxonomy" class="view" hidden>
+      <section class="page-section">
+        <h2>Project phases</h2>
+        <p class="lead">Definitions and when to use each phase. See also <code>content/taxonomy/phases.md</code> in the repo.</p>
+        <div id="taxonomy-content"></div>
+      </section>
+    </div>
+
+    <div id="view-technologies" class="view" hidden>
+      <section class="page-section">
+        <h2>Technologies</h2>
+        <p class="lead">Stacks, languages, and tags used across projects — derived from <code>projects.json</code>.</p>
+        <div id="technologies-content"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+# Build output
+dist/
+out/
+site/dist/
+site/out/
+
+# Dependencies
+node_modules/
+
+# Environment and secrets
+.env
+.env.local
+*.pem
+
+# OS and editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Optional: BALCONY/POTTS
+balcony/__pycache__/
+potts/__pycache__/
+*.pyc
+.venv/
+venv/

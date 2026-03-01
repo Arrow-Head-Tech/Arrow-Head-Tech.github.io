@@ -1,0 +1,9 @@
+[
+  { "id": "idea", "name": "Idea", "description": "Early idea or concept; not yet implemented or only exploratory." },
+  { "id": "test", "name": "Test", "description": "Proof of concept or experimental; validating approach or tech." },
+  { "id": "dev", "name": "Development", "description": "Active development; not yet production-ready." },
+  { "id": "stg", "name": "Staging", "description": "Deployed in staging; ready for production validation." },
+  { "id": "prod", "name": "Production", "description": "Live in production; maintained." },
+  { "id": "archived", "name": "Archived", "description": "No longer actively developed; kept for reference." },
+  { "id": "dropped", "name": "Dropped", "description": "Abandoned or superseded; not maintained." }
+]
