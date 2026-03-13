@@ -60,7 +60,6 @@
                 <th scope="col"><button type="button" data-sort="primary_language">Language</button></th>
                 <th scope="col"><button type="button" data-sort="primary_stack">Stack</button></th>
                 <th scope="col">Tags</th>
-                <th scope="col">Link</th>
                 <th scope="col"><button type="button" data-sort="last_updated">Last update</button></th>
                 <th scope="col">Description</th>
               </tr>
@@ -89,6 +88,27 @@
       </section>
     </div>
   </main>
+
+  <div id="tag-modal" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-title" class="modal-title">Edit tags</h2>
+        <button type="button" id="modal-close" class="modal-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="modal-project-name" class="modal-project-name"></p>
+        <div id="modal-tags" class="modal-tags"></div>
+        <div class="modal-add-row">
+          <input type="text" id="modal-tag-input" class="modal-tag-input" placeholder="New tag…" autocomplete="off">
+          <button type="button" id="modal-add-btn" class="btn-primary">Add</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="modal-cancel" class="btn-secondary">Cancel</button>
+        <button type="button" id="modal-save" class="btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>

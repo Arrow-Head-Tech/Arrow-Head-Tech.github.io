@@ -1,4 +1,24 @@
 (function () {
+  const PHASE_ICONS = {
+    idea:     '💡',
+    test:     '🧪',
+    dev:      '🔨',
+    stg:      '🚧',
+    prod:     '🚀',
+    archived: '📦',
+    dropped:  '🗑️'
+  };
+
+  const STORAGE_KEY = 'arrowhead_tag_overrides';
+
+  function loadTagOverrides() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (_) { return {}; }
+  }
+
+  function saveTagOverrides(overrides) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(overrides));
+  }
+
   const isFromSiteSrc = /\/site\/src\//.test(window.location.pathname);
   const CONTENT_BASE = isFromSiteSrc ? '../../content/' : 'content/';
   const DATA_URL = CONTENT_BASE + 'projects.json';
@@ -11,6 +31,10 @@
   const filters = { phase: new Set(), primary_language: new Set(), primary_stack: new Set(), tags: new Set() };
   let searchText = '';
   let phasesData = null;
+
+  // Modal state
+  let modalProjectId = null;
+  let modalTags = [];
 
   const searchEl = document.getElementById('search');
   const clearBtn = document.getElementById('clear-filters');
@@ -26,6 +50,16 @@
   const viewTechnologies = document.getElementById('view-technologies');
   const taxonomyContent = document.getElementById('taxonomy-content');
   const technologiesContent = document.getElementById('technologies-content');
+
+  // Modal elements
+  const tagModal = document.getElementById('tag-modal');
+  const modalProjectName = document.getElementById('modal-project-name');
+  const modalTagsEl = document.getElementById('modal-tags');
+  const modalTagInput = document.getElementById('modal-tag-input');
+  const modalAddBtn = document.getElementById('modal-add-btn');
+  const modalClose = document.getElementById('modal-close');
+  const modalCancel = document.getElementById('modal-cancel');
+  const modalSave = document.getElementById('modal-save');
 
   function getUniqueValues(key) {
     const set = new Set();
@@ -143,13 +177,12 @@
       const tagsHtml = (p.tags || []).map((t) => `<span class="tag-mini">${escapeHtml(t)}</span>`).join('');
       tr.innerHTML =
         `<td><a href="${escapeHtml(p.repo_url)}" target="_blank" rel="noopener">${escapeHtml(p.name)}</a></td>` +
-        `<td>${escapeHtml(p.phase)}</td>` +
+        `<td>${PHASE_ICONS[p.phase] || ''} ${escapeHtml(p.phase)}</td>` +
         `<td>${escapeHtml(p.primary_language || '—')}</td>` +
         `<td>${escapeHtml(p.primary_stack || '—')}</td>` +
-        `<td class="tags-cell">${tagsHtml || '—'}</td>` +
-        `<td><a href="${escapeHtml(p.repo_url)}" target="_blank" rel="noopener">Open</a></td>` +
+        `<td class="tags-cell">${tagsHtml}<button class="edit-tags-btn" data-id="${escapeHtml(p.id)}" title="Edit tags" aria-label="Edit tags for ${escapeHtml(p.name)}">✏️</button></td>` +
         `<td>${escapeHtml((p.last_updated || '').toString().slice(0, 10)) || '—'}</td>` +
-        `<td class="desc-cell" title="${escapeHtml(p.short_description || '')}">${escapeHtml((p.short_description || '').slice(0, 60))}${(p.short_description || '').length > 60 ? '…' : ''}</td>`;
+        `<td class="desc-cell" title="${escapeHtml(p.short_description || '')}">${escapeHtml((p.short_description || '').slice(0, 150))}${(p.short_description || '').length > 150 ? '…' : ''}</td>`;
       tableBody.appendChild(tr);
     });
   }
@@ -159,8 +192,10 @@
     filteredProjects.forEach((p) => {
       const card = document.createElement('div');
       card.className = 'card';
-      const badges = [p.phase, p.primary_language, p.primary_stack, ...(p.tags || [])].filter(Boolean);
-      const badgesHtml = badges.map((b) => `<span>${escapeHtml(b)}</span>`).join('');
+      const phaseBadge = `<span>${PHASE_ICONS[p.phase] || ''} ${escapeHtml(p.phase)}</span>`;
+      const otherBadges = [p.primary_language, p.primary_stack, ...(p.tags || [])].filter(Boolean)
+        .map((b) => `<span>${escapeHtml(b)}</span>`).join('');
+      const badgesHtml = phaseBadge + otherBadges;
       let linksHtml = `<a href="${escapeHtml(p.repo_url)}" target="_blank" rel="noopener">Repository</a>`;
       if (p.links && p.links.docs) linksHtml += ` <a href="${escapeHtml(p.links.docs)}" target="_blank" rel="noopener">Docs</a>`;
       if (p.links && p.links.demo) linksHtml += ` <a href="${escapeHtml(p.links.demo)}" target="_blank" rel="noopener">Demo</a>`;
@@ -168,7 +203,7 @@
         `<h3><a href="${escapeHtml(p.repo_url)}" target="_blank" rel="noopener">${escapeHtml(p.name)}</a></h3>` +
         `<p class="card-desc">${escapeHtml(p.short_description || '')}</p>` +
         `<div class="card-badges">${badgesHtml}</div>` +
-        `<div class="card-links">${linksHtml}</div>`;
+        `<div class="card-links">${linksHtml} <button class="edit-tags-btn card-edit-btn" data-id="${escapeHtml(p.id)}" aria-label="Edit tags for ${escapeHtml(p.name)}">✏️ Tags</button></div>`;
       cardsWrap.appendChild(card);
     });
   }
@@ -179,6 +214,94 @@
     return div.innerHTML;
   }
 
+  // --- Tag modal ---
+
+  function openTagModal(projectId) {
+    const project = allProjects.find((p) => p.id === projectId);
+    if (!project) return;
+    modalProjectId = projectId;
+    modalTags = [...(project.tags || [])];
+    modalProjectName.textContent = project.name;
+    renderModalTags();
+    tagModal.hidden = false;
+    modalTagInput.value = '';
+    modalTagInput.focus();
+  }
+
+  function closeTagModal() {
+    tagModal.hidden = true;
+    modalProjectId = null;
+    modalTags = [];
+  }
+
+  function renderModalTags() {
+    modalTagsEl.innerHTML = '';
+    if (modalTags.length === 0) {
+      modalTagsEl.innerHTML = '<span class="modal-no-tags">No tags yet.</span>';
+      return;
+    }
+    modalTags.forEach((tag, i) => {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.innerHTML = `${escapeHtml(tag)} <button type="button" class="remove" aria-label="Remove tag ${escapeHtml(tag)}" data-index="${i}">×</button>`;
+      chip.querySelector('.remove').addEventListener('click', () => {
+        modalTags.splice(i, 1);
+        renderModalTags();
+      });
+      modalTagsEl.appendChild(chip);
+    });
+  }
+
+  function addModalTag() {
+    const val = modalTagInput.value.trim();
+    if (!val || modalTags.includes(val)) return;
+    modalTags.push(val);
+    renderModalTags();
+    modalTagInput.value = '';
+    modalTagInput.focus();
+  }
+
+  function saveModalTags() {
+    const project = allProjects.find((p) => p.id === modalProjectId);
+    if (!project) return;
+    project.tags = [...modalTags];
+    const overrides = loadTagOverrides();
+    overrides[modalProjectId] = [...modalTags];
+    saveTagOverrides(overrides);
+    buildFilterChips();
+    syncChipStates();
+    applyFiltersAndRender();
+    closeTagModal();
+  }
+
+  // Modal event listeners
+  modalClose.addEventListener('click', closeTagModal);
+  modalCancel.addEventListener('click', closeTagModal);
+  modalSave.addEventListener('click', saveModalTags);
+  modalAddBtn.addEventListener('click', addModalTag);
+  modalTagInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); addModalTag(); }
+    if (e.key === 'Escape') closeTagModal();
+  });
+  tagModal.addEventListener('click', (e) => {
+    if (e.target === tagModal) closeTagModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !tagModal.hidden) closeTagModal();
+  });
+
+  // Edit button delegation (table + cards)
+  tableBody.addEventListener('click', (e) => {
+    const btn = e.target.closest('.edit-tags-btn');
+    if (btn) openTagModal(btn.dataset.id);
+  });
+  cardsWrap.addEventListener('click', (e) => {
+    const btn = e.target.closest('.edit-tags-btn');
+    if (btn) openTagModal(btn.dataset.id);
+  });
+
+  // --- View / routing ---
+
   function setView(mode) {
     viewMode = mode;
     viewTableBtn.classList.toggle('active', mode === 'table');
@@ -187,17 +310,6 @@
     viewCardsBtn.setAttribute('aria-pressed', mode === 'cards');
     tableWrap.hidden = mode !== 'table';
     cardsWrap.hidden = mode !== 'cards';
-  }
-
-  function initSort() {
-    document.querySelectorAll('.table th [data-sort]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const key = btn.dataset.sort;
-        if (sortKey === key) sortDir *= -1;
-        else { sortKey = key; sortDir = 1; }
-        applyFiltersAndRender();
-      });
-    });
   }
 
   document.querySelectorAll('.table th button').forEach((btn) => {
@@ -304,7 +416,8 @@
     })
     .then((data) => {
       if (!Array.isArray(data)) throw new Error('Expected array');
-      allProjects = data;
+      const overrides = loadTagOverrides();
+      allProjects = data.map((p) => overrides[p.id] ? { ...p, tags: overrides[p.id] } : p);
       buildFilterChips();
       syncChipStates();
       renderActiveFilters();
