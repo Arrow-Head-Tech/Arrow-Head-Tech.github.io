@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Copies site/src + content/projects.json to dist/ for deployment.
+ * Copies site/ + content/projects.json to dist/ for deployment.
  * Usage: node scripts/build.js (from repo root)
  */
 
@@ -9,7 +9,7 @@ const path = require('path');
 
 const root = path.resolve(__dirname, '..');
 const distPath = path.join(root, 'dist');
-const siteSrc = path.join(root, 'site', 'src');
+const siteSrc = path.join(root, 'site');
 const contentPath = path.join(root, 'content', 'projects.json');
 
 function copyRecursive(src, dest) {
@@ -27,7 +27,7 @@ function copyRecursive(src, dest) {
 
 function main() {
   if (!fs.existsSync(siteSrc)) {
-    console.error('site/src not found');
+    console.error('site/ not found');
     process.exit(1);
   }
   if (!fs.existsSync(contentPath)) {
@@ -47,6 +47,14 @@ function main() {
     fs.mkdirSync(destTaxonomy, { recursive: true });
     for (const name of fs.readdirSync(taxonomyDir)) {
       fs.copyFileSync(path.join(taxonomyDir, name), path.join(destTaxonomy, name));
+    }
+  }
+  const flowsDir = path.join(root, 'content', 'flows');
+  if (fs.existsSync(flowsDir)) {
+    const destFlows = path.join(distPath, 'content', 'flows');
+    fs.mkdirSync(destFlows, { recursive: true });
+    for (const name of fs.readdirSync(flowsDir)) {
+      fs.copyFileSync(path.join(flowsDir, name), path.join(destFlows, name));
     }
   }
   console.log('Build done: dist/');

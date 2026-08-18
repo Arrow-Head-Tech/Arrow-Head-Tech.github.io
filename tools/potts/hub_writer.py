@@ -9,11 +9,11 @@ import re
 import sys
 from pathlib import Path
 
-# Repo root = parent of potts/
-REPO_ROOT = Path(__file__).resolve().parent.parent
+# Repo root = parent of tools/potts/
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 PROJECTS_JSON = REPO_ROOT / "content" / "projects.json"
 
-PHASES = ("idea", "test", "dev", "stg", "prod", "archived", "dropped")
+PHASES = ("idea", "prototype", "dev", "stg", "prod", "archived", "dropped")
 REQUIRED = ("id", "name", "repo_url", "phase", "primary_language", "primary_stack", "tags", "short_description")
 OPTIONAL = ("owner", "team", "created_at", "last_updated", "status_notes", "visibility", "links")
 

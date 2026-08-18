@@ -14,13 +14,36 @@ Servir a partir da **raiz do repositório** (ou da pasta `dist/` após o build) 
 # Opção 1: raiz do repo (recomendado para dev)
 cd Arrow-Head-Tech.github.io
 python3 -m http.server 8000
-# Abra http://localhost:8000/site/src/
+# Abra http://localhost:8000/site/
 
 # Opção 2: build + servir dist
 npm run build
 npx serve dist
 # Abra http://localhost:3000 (ou a porta indicada)
 ```
+
+---
+
+## Rodar o backend (API)
+
+O backend Flask é independente do site estático e fornece endpoints para mutações (GitHub) e chat (LLM proxy).
+
+```bash
+cd api
+pip install -r requirements.txt
+cp .env.example .env      # configure ALLOWED_ORIGINS
+python app.py             # escuta em :5001 por padrão
+```
+
+Testar:
+```bash
+curl http://localhost:5001/api/health
+# → {"status":"ok"}
+```
+
+> **Atenção HTTPS:** O GitHub Pages serve o site via HTTPS. Browsers bloqueiam requisições de páginas HTTPS para backends HTTP. Para uso em produção, coloque o backend atrás de HTTPS (ngrok, Railway, reverse proxy, etc.).
+
+Endpoints e headers: ver `api/README.md`.
 
 ---
 
@@ -31,7 +54,11 @@ npx serve dist
 3. Abra um PR; o CI valida o schema.
 4. Após o merge, o site é atualizado no próximo deploy (se o workflow de deploy estiver ativo).
 
-*(Futuro: GitHub App — quando um novo repo for criado na org, um PR será aberto automaticamente adicionando uma entrada. Ver Addendum no plano.)*
+### Automação (GitHub App)
+
+Quando um **novo repositório** é criado na org Arrow-Head-Tech, um **GitHub App** pode abrir automaticamente um PR neste repo adicionando uma entrada em `content/projects.json` (phase `idea`, placeholders Unknown/TBD). Configuração: **docs/GITHUB-APP-SETUP.md**. O receptor de webhook está em **tools/webhook/** (ver tools/webhook/README.md).
+
+**Triagem:** Os PRs criados pelo bot trazem entradas com placeholders. Antes ou depois do merge, edite `content/projects.json` para preencher `primary_language`, `primary_stack`, `tags` e `short_description` conforme o projeto.
 
 ---
 
@@ -54,8 +81,10 @@ Repositório **Arrow-Head-Tech.github.io** → site em **https://arrow-head-tech
 
 - `content/projects.json` — lista de projetos (fonte única)
 - `content/schema/projects.schema.json` — schema para validação no CI
-- `site/src/` — HTML, CSS, JS do hub (table/cards, busca, filtros)
+- `site/` — HTML, CSS, JS do hub (table/cards, busca, filtros, chat)
+- `api/` — backend Flask (mutações GitHub, proxy LLM). Ver `api/README.md`
 - `scripts/validate-schema.js` — validação com Ajv
 - `scripts/build.js` — copia site + content para `dist/`
-- `balcony/` — scanner local (ver README em balcony/)
-- `potts/` — assistente por voz + “adicionar ao hub” Hub writer: `python potts/hub_writer.py list|add|get`. Ver README em potts/; configurar GITHUB_TOKEN em potts/.env (copiar de .env.example)
+- `tools/balcony/` — scanner local (ver README em tools/balcony/)
+- `tools/potts/` — CLI para projects.json. Hub writer: `python tools/potts/hub_writer.py list|add|get`. Ver README em tools/potts/
+- `tools/webhook/` — receptor de webhook do GitHub App (repository created → PR no hub). Ver docs/GITHUB-APP-SETUP.md e tools/webhook/README.md

@@ -10,7 +10,7 @@
       "repo_url": { "type": "string", "format": "uri" },
       "phase": {
         "type": "string",
-        "enum": ["idea", "test", "dev", "stg", "prod", "archived", "dropped"]
+        "enum": ["idea", "prototype", "dev", "stg", "prod", "archived", "dropped"]
       },
       "primary_language": { "type": "string" },
       "primary_stack": { "type": "string" },

@@ -22,9 +22,13 @@ Thumbs.db
 *.log
 npm-debug.log*
 
-# Optional: BALCONY/POTTS
-balcony/__pycache__/
-potts/__pycache__/
+# Optional: tools (BALCONY/POTTS/webhook) and api
+tools/balcony/__pycache__/
+tools/potts/__pycache__/
+tools/webhook/__pycache__/
+api/__pycache__/
 *.pyc
 .venv/
 venv/
+
+.secret/

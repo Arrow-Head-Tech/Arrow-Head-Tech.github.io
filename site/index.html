@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arrowhead Tech</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+
+    <!-- ── Sidebar ─────────────────────────────────────────────── -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span class="logo-icon">▶</span>
+        <span class="logo-text">Arrowhead Tech</span>
+      </div>
+
+      <div class="sidebar-section">
+        <p class="sidebar-label">VIEWS</p>
+        <button class="view-btn active" data-view="cards">
+          <span class="view-icon">⊞</span> Cards
+        </button>
+        <button class="view-btn" data-view="kanban">
+          <span class="view-icon">⊟</span> Kanban
+        </button>
+        <button class="view-btn" data-view="table">
+          <span class="view-icon">≡</span> Table
+        </button>
+      </div>
+
+      <div class="sidebar-section">
+        <a class="view-btn sidebar-chat-link" href="chat.html">
+          <span class="view-icon">✦</span> New Idea
+        </a>
+      </div>
+
+      <div class="sidebar-section" id="phase-filters">
+        <p class="sidebar-label">PHASE</p>
+      </div>
+
+      <div class="sidebar-section" id="tag-filters">
+        <p class="sidebar-label">TAGS</p>
+      </div>
+    </aside>
+
+    <!-- ── Main ───────────────────────────────────────────────── -->
+    <div class="main">
+
+      <div class="topbar">
+        <div class="search-wrap">
+          <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="search" id="search" placeholder="Search by name, language, stack…" autocomplete="off">
+        </div>
+        <div class="topbar-actions">
+          <div class="sort-wrap">
+            <button id="sort-btn" class="sort-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
+              <span id="sort-label">Sort by</span>
+            </button>
+            <div class="sort-menu" id="sort-menu" hidden>
+              <button data-sort="name">Name</button>
+              <button data-sort="phase">Phase</button>
+              <button data-sort="primary_language">Language</button>
+              <button data-sort="last_updated">Last updated</button>
+            </div>
+          </div>
+          <button class="sort-btn" id="settings-btn" title="Settings" onclick="window.SettingsModal && window.SettingsModal.open()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="active-filters" id="active-filters" hidden></div>
+
+      <div class="content-area">
+        <div id="view-cards" class="view-content cards-grid"></div>
+        <div id="view-kanban" class="view-content kanban-board" hidden></div>
+        <div id="view-table" class="view-content" hidden>
+          <table class="projects-table">
+            <thead>
+              <tr>
+                <th><button data-sort="name">Name</button></th>
+                <th><button data-sort="phase">Phase</button></th>
+                <th><button data-sort="primary_language">Language</button></th>
+                <th><button data-sort="primary_stack">Stack</button></th>
+                <th class="th-plain">Tags</th>
+                <th><button data-sort="last_updated">Updated</button></th>
+                <th class="th-plain">Description</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /.main -->
+  </div><!-- /.app -->
+
+  <!-- ── Tag edit modal ─────────────────────────────────────── -->
+  <div class="modal-overlay" id="tag-modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-project-name">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-project-name"></h2>
+        <button class="modal-close" id="modal-close" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-tags" id="modal-tags"></div>
+        <div class="modal-input-row">
+          <input type="text" id="modal-tag-input" placeholder="Add a tag…" autocomplete="off">
+          <button id="modal-add-btn">Add</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="modal-cancel">Cancel</button>
+        <button class="btn-primary" id="modal-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="settings.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

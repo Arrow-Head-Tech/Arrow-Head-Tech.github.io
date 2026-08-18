@@ -1,6 +1,6 @@
 [
   { "id": "idea", "name": "Idea", "description": "Early idea or concept; not yet implemented or only exploratory." },
-  { "id": "test", "name": "Test", "description": "Proof of concept or experimental; validating approach or tech." },
+  { "id": "prototype", "name": "Prototype", "description": "Proof of concept or experimental; validating approach or tech." },
   { "id": "dev", "name": "Development", "description": "Active development; not yet production-ready." },
   { "id": "stg", "name": "Staging", "description": "Deployed in staging; ready for production validation." },
   { "id": "prod", "name": "Production", "description": "Live in production; maintained." },

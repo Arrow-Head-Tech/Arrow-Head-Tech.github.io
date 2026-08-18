@@ -15,18 +15,18 @@ try:
     from dotenv import load_dotenv
     _balcony_dir = Path(__file__).resolve().parent
     load_dotenv(_balcony_dir / ".env")
-    load_dotenv(_balcony_dir.parent / ".env")
+    load_dotenv(_balcony_dir.parent.parent / ".env")
 except ImportError:
     pass
 
-# Repo root = parent of balcony/
-REPO_ROOT = Path(__file__).resolve().parent.parent
+# Repo root = parent of tools/balcony/
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 CONTENT_JSON = REPO_ROOT / "content" / "projects.json"
 
 # Folder name → phase (plan: 1.IDEA, 2.SCRATCH, 3.PROTOTYPE, 4.HML, 5.PROD, 6.ARCHIVED, 7.DROPPED)
 PHASE_FOLDERS = {
     "1.IDEA": "idea",
-    "2.SCRATCH": "test",
+    "2.SCRATCH": "prototype",
     "3.PROTOTYPE": "dev",
     "4.HML": "dev",
     "5.PROD": "prod",

@@ -1,0 +1,51 @@
+{
+  "id": "idea-flow",
+  "name": "Idea Qualification",
+  "terminal": "done",
+  "terminalMock": "Got it. How would you like to continue? I can help refine any section of the artifact, think through next steps, or explore a specific aspect in more depth.",
+  "steps": [
+    {
+      "key": "understand",
+      "label": "Understand",
+      "alwaysConfirm": false,
+      "confirm": null,
+      "mock": "Thanks for sharing that — a few clarifying questions:\n\n1. Who is the primary user? What specific frustration or gap does this address for them?\n2. Have you seen any existing tools or approaches that partially solve this? What's missing in them?\n3. What would \"working well\" look like after a few months — a personal tool, a small product, something else?\n\n[PHASE:research]"
+    },
+    {
+      "key": "research",
+      "label": "Research",
+      "alwaysConfirm": true,
+      "confirm": {
+        "icon": "🔍",
+        "title": "Ready to research",
+        "body": "I've understood the idea. Next I'll look into the competitive landscape, existing solutions, and market context.",
+        "btn": "Continue → Research"
+      },
+      "mock": "Here's what I found on the competitive landscape and context:\n\n**Existing solutions:** A few incumbents exist in this space, but none seem to address the angle you're taking directly.\n\n**Market context:** The problem space is real and growing — especially for indie developers and small teams who are underserved by enterprise tooling.\n\n**Key gaps identified:**\n- Most tools require heavy setup without meaningful out-of-the-box value\n- Workflow integration is consistently weak across existing options\n- No strong option for solo practitioners at a reasonable cost\n\n[PHASE:follow_up]"
+    },
+    {
+      "key": "follow_up",
+      "label": "Follow-up",
+      "alwaysConfirm": false,
+      "confirm": {
+        "icon": "💬",
+        "title": "Ready for follow-up",
+        "body": "Research complete. I'll now ask targeted follow-up questions based on the findings.",
+        "btn": "Continue → Follow-up"
+      },
+      "mock": "Based on the research findings, two targeted questions:\n\n1. Given the weak integration story in existing tools — do you see this as a standalone app, a plugin (e.g. VS Code, Obsidian), or an API-first service?\n2. What's the minimum slice that makes this worth sharing with one other person — what single capability has to work first?\n\n[PHASE:generating]"
+    },
+    {
+      "key": "generating",
+      "label": "Generate",
+      "alwaysConfirm": false,
+      "confirm": {
+        "icon": "✍️",
+        "title": "Ready to generate",
+        "body": "All context gathered. I'll now produce your structured IDEA.md artifact.",
+        "btn": "Continue → Generate"
+      },
+      "mock": "Here is your structured idea artifact:\n\n```markdown:IDEA.md\n# Idea: {LAST_USER_MSG}\n\n## Summary\nA brief description of the core concept and its value proposition.\n\n## Problem\nWhat problem does this solve? Who experiences it?\n\n## Solution Hypothesis\nHow does this idea address the problem?\n\n## Competitive Landscape\n- Existing alternatives address part of the problem but lack key workflow integration\n- No strong option for the specific user profile you're targeting\n\n## Differentials\n- What makes this different from existing alternatives?\n\n## Open Questions\n- [ ] What is the minimum viable version?\n- [ ] Who are the early adopters?\n- [ ] What assumptions need validating first?\n\n## Next Step\nDefine a small, concrete experiment to validate the core hypothesis.\n```\n\nYour `IDEA.md` is ready in the asset panel. Review, copy, or download it from there. [PHASE:done]"
+    }
+  ]
+}

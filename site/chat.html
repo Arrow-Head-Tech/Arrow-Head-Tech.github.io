@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>New Idea — Arrowhead Tech</title>
+  <link rel="stylesheet" href="chat.css">
+</head>
+<body>
+  <div class="chat-app">
+
+    <!-- ── Sidebar ─────────────────────────────────────────────── -->
+    <aside class="chat-sidebar">
+      <a class="sidebar-logo" href="index.html">
+        <span class="logo-icon">▶</span>
+        <span class="logo-text">Arrowhead Tech</span>
+      </a>
+
+      <div class="sidebar-actions">
+        <button class="new-chat-btn" id="new-chat-btn">
+          <span>+</span> New Chat
+        </button>
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-toggle-row">
+          <span class="toggle-label">Auto-advance</span>
+          <button class="toggle-switch" id="auto-advance-toggle" role="switch" aria-checked="true" title="Auto-advance phases"></button>
+        </div>
+        <button class="settings-gear-btn" id="settings-btn" title="Settings" onclick="window.SettingsModal && window.SettingsModal.open()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Settings
+        </button>
+      </div>
+
+      <div class="sidebar-sessions">
+        <p class="sessions-label">SESSIONS</p>
+        <div id="sessions-list"></div>
+      </div>
+    </aside>
+
+    <!-- ── Main ───────────────────────────────────────────────── -->
+    <div class="chat-main" id="chat-main">
+
+      <!-- Landing state -->
+      <div class="chat-landing" id="chat-landing">
+        <div class="landing-hero">
+          <h1 class="landing-title">What shall we build today?</h1>
+          <p class="landing-sub">I'm here to help you capture ideas, plan proofs of concept, and produce structured artifacts.</p>
+        </div>
+        <div class="landing-hint">
+          <span class="hint-icon">✦</span> Start: describe your idea below
+        </div>
+      </div>
+
+      <!-- Phase progress bar (hidden in landing) -->
+      <div class="phase-progress" id="phase-progress" hidden></div>
+
+      <!-- Conversation -->
+      <div class="chat-conversation" id="chat-conversation" hidden></div>
+
+      <!-- Input -->
+      <div class="chat-input-wrap">
+        <div class="chat-input-box">
+          <button class="input-action-btn" id="attach-btn" title="Attach file (coming soon)" disabled>+</button>
+          <textarea
+            class="chat-textarea"
+            id="chat-input"
+            placeholder="Describe your idea…"
+            rows="1"
+          ></textarea>
+          <button class="send-btn" id="send-btn" title="Send">→</button>
+        </div>
+      </div>
+
+    </div><!-- /.chat-main -->
+
+    <!-- ── Asset Panel ──────────────────────────────────────────── -->
+    <aside class="asset-panel" id="asset-panel">
+      <div class="panel-header">
+        <div class="panel-tabs" id="panel-tabs"></div>
+        <button class="panel-close" id="panel-close" title="Close panel">×</button>
+      </div>
+      <div class="panel-content" id="panel-content"></div>
+      <div class="panel-footer">
+        <button class="panel-btn" id="copy-btn">Copy</button>
+        <button class="panel-btn primary" id="download-btn">↓ Download .md</button>
+      </div>
+    </aside>
+
+  </div><!-- /.chat-app -->
+
+  <script src="settings.js"></script>
+  <script src="chat.js"></script>
+</body>
+</html>
